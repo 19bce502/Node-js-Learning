@@ -1,20 +1,25 @@
-const path = require('path');
-
-const express = require('express');
-const bodyParser = require('body-parser');
-
-const app = express();
-
-const adminData = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
-
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(express.static(path.join(__dirname,'public')));
-app.use('/admin', adminData.routes);
-app.use(shopRoutes);
-
-app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
+const express= require('express');
+const app=express;
+app.use((req,res,next)=> {
+//res.send("In the middleware");
+console.log('<h1>First middleware</h1>');
+next();
 });
+
+app.use((req,res,next)=>{
+   
+    console.log('<h1>Second Middleware </h1>');
+    res.send('Assignemnt solved ');
+    });
+
+// app.use('/',(req,res,next)=>{
+// res.send("In the  another middleware");
+// console.log('<h1>hey slash</h1>');
+// next();
+// });
+// app.use('/user',(req,res,next)=>{
+//     res.send("In the  another middleware");
+//     console.log('<h1>hey slash</h1>');
+//     });
 
 app.listen(3000);
