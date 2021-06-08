@@ -1,23 +1,21 @@
+const path = require('path');
 
-const express = require ('express');
-const app =express();
+const express = require('express');
+const bodyParser = require('body-parser');
 
-app.use('/',(req,res,next)=>{
-    console.log('This always run');
-    next();
-   // res.send('<h1>hello from express</h1>')
-    });
-app.use('/add-product',(req,res,next)=>{
-console.log('Add product page ');
-res.send('<h1>This is product page</h1>')
-next();
+const app = express();
+app.set('view engine','pug');
+app.set('views','views');
+const adminData = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.static(path.join(__dirname,'public')));
+app.use('/admin', adminData.routes);
+app.use(shopRoutes);
+
+app.use((req, res, next) => {
+    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
 });
 
-app.use('/',(req,res,next)=>{
-    console.log('In the next  middleware!');
-    res.send('<h1>hello from express</h1>')
-    });
-//const server =http.createServer(app);
 app.listen(3000);
-
-
